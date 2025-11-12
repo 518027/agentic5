@@ -4,13 +4,16 @@ def load_graph(path):
     g = Graph()
     if path.endswith(".ttl"):
         g.parse(path, format="turtle")
-    elif path.endswith(".jsonld"):
+    elif path.endswith(".jsonld") or path.endswith(".json"):
         g.parse(path, format="json-ld")
     else:
-        g.parse(path)  # autodetect
+        try:
+            g.parse(path)
+        except Exception:
+            g.parse(path, format="turtle")
     return g
 
 if __name__ == "__main__":
-    import sys, json
+    import sys
     g = load_graph(sys.argv[1])
-    print("Triples:", len(g))
+    print("Loaded triples:", len(g))

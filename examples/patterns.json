@@ -1,0 +1,42 @@
+[
+  {
+    "id": "http://example.org/Pattern1",
+    "title": "Literature Review Pipeline",
+    "steps": [
+      {
+        "step": "http://example.org/Step1",
+        "order": 1,
+        "agent": "http://example.org/AgentA",
+        "task": "http://example.org/SearchLiterature",
+        "tool": "http://example.org/SearchAPI"
+      },
+      {
+        "step": "http://example.org/Step2",
+        "order": 2,
+        "agent": "http://example.org/AgentA",
+        "task": "http://example.org/Summarize",
+        "tool": "http://example.org/SearchAPI"
+      }
+    ]
+  },
+  {
+    "id": "http://example.org/Pattern2",
+    "title": "Summarization with Human in Loop",
+    "steps": [
+      {
+        "step": "http://example.org/P2Step1",
+        "order": 1,
+        "agent": "http://example.org/AgentB",
+        "task": "http://example.org/GenerateSummary",
+        "tool": null
+      },
+      {
+        "step": "http://example.org/P2Step2",
+        "order": 2,
+        "agent": "http://example.org/HumanReviewer",
+        "task": "http://example.org/ApproveSummary",
+        "tool": null
+      }
+    ]
+  }
+]

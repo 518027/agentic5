@@ -1,10 +1,16 @@
+import json
 from rdflib import Namespace
-from rdflib.namespace import RDF, RDFS
+from rdflib.namespace import RDF
 from ingest import load_graph
 
 AG = Namespace("http://www.w3id.org/agentic-ai/onto#")
+DCT = Namespace("http://purl.org/dc/terms/")
+EX = Namespace("http://example.org/")
 
-def find_workflow_patterns(g):
+def uri_local_name(uri):
+    return uri.split('/')[-1] if isinstance(uri, str) else str(uri)
+
+def find_workflow_patterns(graph):
     q = """
     PREFIX : <http://www.w3id.org/agentic-ai/onto#>
     PREFIX dcterms: <http://purl.org/dc/terms/>
@@ -14,14 +20,14 @@ def find_workflow_patterns(g):
       OPTIONAL { ?pattern dcterms:title ?title. }
       OPTIONAL {
          ?pattern :hasWorkflowStep ?step .
-         ?step :stepOrder ?stepOrder ;
-               :performedBy ?agent ;
-               :hasAssociatedTask ?task .
+         OPTIONAL { ?step :stepOrder ?stepOrder. }
+         OPTIONAL { ?step :performedBy ?agent. }
+         OPTIONAL { ?step :hasAssociatedTask ?task. }
          OPTIONAL { ?agent :usesTool ?tool. }
       }
     } ORDER BY ?pattern ?stepOrder
     """
-    res = g.query(q)
+    res = graph.query(q)
     patterns = {}
     for row in res:
         pid = str(row.pattern)
@@ -35,10 +41,20 @@ def find_workflow_patterns(g):
                 "task": str(row.task) if row.task else None,
                 "tool": str(row.tool) if row.tool else None
             })
+    for p in patterns.values():
+        p["steps"].sort(key=lambda s: (s["order"] if s["order"] is not None else 999))
     return list(patterns.values())
 
-if __name__ == "__main__":
-    import sys, json
-    g = load_graph(sys.argv[1])
+def extract_to_json(input_path, output_path):
+    g = load_graph(input_path)
     patterns = find_workflow_patterns(g)
-    print(json.dumps(patterns, indent=2))
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(patterns, f, indent=2)
+    print(f"Wrote {len(patterns)} pattern(s) to {output_path}")
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) < 3:
+        print("Usage: python extractor.py <input.ttl> <out.json>")
+        sys.exit(1)
+    extract_to_json(sys.argv[1], sys.argv[2])
