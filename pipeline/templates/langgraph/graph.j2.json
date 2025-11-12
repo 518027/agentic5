@@ -1,0 +1,22 @@
+{
+  "id": "{{ pattern.id.split('/')[-1] }}",
+  "title": "{{ pattern.title|e }}",
+  "nodes": [
+    {% for s in pattern.steps %}
+    {
+      "id": "n{{ loop.index }}",
+      "type": "action",
+      "meta": {
+        "task": "{{ s.task.split('/')[-1] if s.task else '' }}",
+        "agent": "{{ s.agent.split('/')[-1] if s.agent else '' }}",
+        "tool": "{{ s.tool.split('/')[-1] if s.tool else '' }}"
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "edges": [
+    {% for s in pattern.steps[:-1] %}
+    {"from": "n{{ loop.index }}", "to": "n{{ loop.index + 1 }}"}{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}

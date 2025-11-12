@@ -1,0 +1,32 @@
+{
+  "id": "Pattern1",
+  "title": "Literature Review Pipeline",
+  "nodes": [
+    
+    {
+      "id": "n1",
+      "type": "action",
+      "meta": {
+        "task": "SearchLiterature",
+        "agent": "AgentA",
+        "tool": "SearchAPI"
+      }
+    },
+    
+    {
+      "id": "n2",
+      "type": "action",
+      "meta": {
+        "task": "Summarize",
+        "agent": "AgentA",
+        "tool": "SearchAPI"
+      }
+    }
+    
+  ],
+  "edges": [
+    
+    {"from": "n1", "to": "n2"}
+    
+  ]
+}

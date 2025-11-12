@@ -1,0 +1,32 @@
+{
+  "id": "Pattern2",
+  "title": "Summarization with Human in Loop",
+  "nodes": [
+    
+    {
+      "id": "n1",
+      "type": "action",
+      "meta": {
+        "task": "GenerateSummary",
+        "agent": "AgentB",
+        "tool": ""
+      }
+    },
+    
+    {
+      "id": "n2",
+      "type": "action",
+      "meta": {
+        "task": "ApproveSummary",
+        "agent": "HumanReviewer",
+        "tool": ""
+      }
+    }
+    
+  ],
+  "edges": [
+    
+    {"from": "n1", "to": "n2"}
+    
+  ]
+}
