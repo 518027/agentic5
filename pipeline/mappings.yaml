@@ -1,0 +1,23 @@
+classes:
+  Agent:
+    langgraph: Node
+    mastra: Agent
+  WorkflowPattern:
+    langgraph: Graph
+    mastra: Workflow
+  WorkflowStep:
+    langgraph: Node
+    mastra: Step
+  Tool:
+    langgraph: ExternalNode
+    mastra: Tool
+properties:
+  hasWorkflowStep:
+    langgraph: hasNode
+    mastra: hasStep
+  performedBy:
+    langgraph: performer
+    mastra: actor
+  usesTool:
+    langgraph: dependsOn
+    mastra: usesTool
