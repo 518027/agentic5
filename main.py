@@ -27,13 +27,15 @@ def setup_mastra_environment():
             "start": "tsx src/mastra/index.ts"
         },
         "dependencies": {
-            # PERBAIKAN: Gunakan "latest" untuk menghindari error versi tidak ditemukan
-            "@mastra/core": "latest", 
-            "@mastra/memory": "latest",
-            "@mastra/engine": "latest",
+            # Kita gunakan versi spesifik yang sesuai dengan log deployer Cloud (0.24.5)
+            "@mastra/core": "0.24.5", 
             "ai": "^4.1.17",
             "zod": "^3.23.8",
             "dotenv": "^16.4.5"
+        },
+        # PERBAIKAN PENTING: Menambahkan 'overrides' untuk mengatasi konflik versi AI SDK
+        "overrides": {
+            "ai": "^4.1.17"
         },
         "devDependencies": {
             "tsx": "^4.7.1",
@@ -77,8 +79,6 @@ export const mastra = new Mastra({
 
 console.log("✅ Mastra Cloud Instance initialized.");
 """
-    with open(os.path.join(MASTRA_SRC, "index.ts"), "w", encoding="utf-8") as f:
-        f.write(index_ts)
     # PERBAIKAN: Menambahkan encoding="utf-8" agar emoji ✅ bisa tersimpan
     with open(os.path.join(MASTRA_SRC, "index.ts"), "w", encoding="utf-8") as f:
         f.write(index_ts)
