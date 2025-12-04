@@ -27,9 +27,10 @@ def setup_mastra_environment():
             "start": "tsx src/mastra/index.ts"
         },
         "dependencies": {
-            "@mastra/core": "^0.1.25", 
-            "@mastra/memory": "^0.1.25",
-            "@mastra/engine": "^0.1.25",
+            # PERBAIKAN: Gunakan "latest" untuk menghindari error versi tidak ditemukan
+            "@mastra/core": "latest", 
+            "@mastra/memory": "latest",
+            "@mastra/engine": "latest",
             "ai": "^4.1.17",
             "zod": "^3.23.8",
             "dotenv": "^16.4.5"
@@ -40,7 +41,7 @@ def setup_mastra_environment():
             "@types/node": "^20.11.24"
         }
     }
-    # PERBAIKAN: Menambahkan encoding="utf-8"
+    
     with open(os.path.join(MASTRA_ROOT, "package.json"), "w", encoding="utf-8") as f:
         json.dump(pkg_json, f, indent=2)
 
@@ -60,7 +61,6 @@ def setup_mastra_environment():
         "include": ["src/**/*"],
         "exclude": ["node_modules"]
     }
-    # PERBAIKAN: Menambahkan encoding="utf-8"
     with open(os.path.join(MASTRA_ROOT, "tsconfig.json"), "w", encoding="utf-8") as f:
         json.dump(tsconfig, f, indent=2)
 
@@ -75,10 +75,10 @@ export const mastra = new Mastra({
   workflows: {},
 });
 
-// Logging status
 console.log("✅ Mastra Cloud Instance initialized.");
-console.log("   Generated workflows are located in ./src/mastra/");
 """
+    with open(os.path.join(MASTRA_SRC, "index.ts"), "w", encoding="utf-8") as f:
+        f.write(index_ts)
     # PERBAIKAN: Menambahkan encoding="utf-8" agar emoji ✅ bisa tersimpan
     with open(os.path.join(MASTRA_SRC, "index.ts"), "w", encoding="utf-8") as f:
         f.write(index_ts)

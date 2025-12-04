@@ -8,6 +8,4 @@ export const mastra = new Mastra({
   workflows: {},
 });
 
-// Logging status
 console.log("✅ Mastra Cloud Instance initialized.");
-console.log("   Generated workflows are located in ./src/mastra/");
