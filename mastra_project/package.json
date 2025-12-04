@@ -1,19 +1,21 @@
 {
-  "name": "mastra_project",
-  "type": "module",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "agentic-converter-mastra",
+  "version": "0.1.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "mastra dev",
+    "start": "tsx src/mastra/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@mastra/core": "^0.24.5",
-    "@types/node": "^24.10.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "@mastra/core": "^0.1.25",
+    "@mastra/memory": "^0.1.25",
+    "@mastra/engine": "^0.1.25",
+    "ai": "^4.1.17",
+    "zod": "^3.23.8",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3",
+    "@types/node": "^20.11.24"
   }
 }

@@ -2,11 +2,9 @@ import re
 
 def sanitize_identifier(name):
     if not name: return "unknown_node"
-    # Ganti spasi/dash dengan underscore, hapus karakter aneh
     clean = re.sub(r'[ \-\./:\\]', '_', str(name))
     clean = re.sub(r'[^a-zA-Z0-9_]', '', clean)
     clean = clean.lower()
-    # Pastikan tidak diawali angka
     if clean and clean[0].isdigit():
         clean = "n_" + clean
     return clean
@@ -20,8 +18,9 @@ def generate_mastra_code(data):
         agent_names.append(safe_id)
         clean_instr = el['logic'].replace("\n", " ").replace('"', "'")
         
+        # PERUBAHAN: Menambahkan kata kunci 'export'
         agent_defs += f"""
-const {safe_id} = new Agent({{
+export const {safe_id} = new Agent({{
   name: "{el['id']}", 
   instructions: "{clean_instr}",
   model: {{
@@ -37,6 +36,7 @@ const {safe_id} = new Agent({{
     sys_name = sanitize_identifier(data['system_name'])
     if not sys_name: sys_name = "agentic_system"
 
+    # PERUBAHAN: Menambahkan 'export' pada workflow
     return f"""// Generated Mastra AI Framework (TypeScript)
 // Source: {data['filename']}
 // System: {data['system_name']}
@@ -48,7 +48,7 @@ import {{ z }} from 'zod';
 {agent_defs}
 
 // --- WORKFLOW DEFINITION ---
-const {sys_name}_workflow = new Workflow({{
+export const {sys_name}_workflow = new Workflow({{
   name: "{data['system_name']}",
   triggerSchema: z.object({{
     task: z.string(),
@@ -74,17 +74,16 @@ function printStructure(systemName: string, agents: any[]) {{
     console.log("\\n");
 }}
 
-// --- EXECUTION BLOCK ---
-async function main() {{
-  console.log("🚀 Starting Real Mastra Workflow: {data['system_name']}");
-  
-  const agentsList = [{agent_list_str}] as any[];
-  printStructure("{data['system_name']}", agentsList);
-
-  console.log("✅ Workflow constructed successfully.");
+// --- EXECUTION BLOCK (Only runs if directly executed via CLI) ---
+// This check prevents auto-execution when imported by index.ts
+if (require.main === module) {{
+  (async () => {{
+    console.log("🚀 Starting Real Mastra Workflow: {data['system_name']}");
+    const agentsList = [{agent_list_str}] as any[];
+    printStructure("{data['system_name']}", agentsList);
+    console.log("✅ Workflow constructed successfully.");
+  }})();
 }}
-
-main();
 """
 
 def generate_langgraph_code(data):
