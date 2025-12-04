@@ -18,7 +18,8 @@ def setup_mastra_environment():
     """Membuat struktur folder dan file konfigurasi Mastra Cloud"""
     os.makedirs(MASTRA_SRC, exist_ok=True)
 
-    # 1. Generate package.json
+    # 1. Generate package.json (MINIMALIS)
+    # Kita menghapus 'ai', '@mastra/memory', dll agar tidak bentrok dengan core.
     pkg_json = {
         "name": "agentic-converter-mastra",
         "version": "0.1.0",
@@ -27,15 +28,14 @@ def setup_mastra_environment():
             "start": "tsx src/mastra/index.ts"
         },
         "dependencies": {
-            # Kita gunakan versi spesifik yang sesuai dengan log deployer Cloud (0.24.5)
-            "@mastra/core": "0.24.5", 
-            "ai": "^4.1.17",
-            "zod": "^3.23.8",
-            "dotenv": "^16.4.5"
+            # Kita gunakan versi 0.24.5 agar cocok dengan deployer cloud
+            "@mastra/core": "0.24.5",
+            "zod": "^3.23.8"
         },
-        # PERBAIKAN PENTING: Menambahkan 'overrides' untuk mengatasi konflik versi AI SDK
+        # Overrides untuk memaksa satu versi 'ai' SDK saja (Versi 4.x yang diminta Core)
+        # Ini mencegah konflik dengan versi 5.x yang diminta oleh sub-dependensi lain
         "overrides": {
-            "ai": "^4.1.17"
+            "ai": "4.3.19" 
         },
         "devDependencies": {
             "tsx": "^4.7.1",
